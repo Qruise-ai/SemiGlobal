@@ -383,9 +383,11 @@ following keys:
     tf = tgrid[Nt - 1]
     # The length of the time interval of the whole propagation (can be negative):
     T = tf - tinit
+    # If Nts is a float, it has to be converted to an integer such that it can be
+    # used for indexing:
+    Nts = int(np.round(Nts))
     # The length of the time step interval:
     Tts = T/Nts
-    Nts = int(Nts)
     # The index of the middle term in the time step:
     tmidi = Nt_ts//2
     # This is actually unrequired, but I inserted this to make the Python code 
