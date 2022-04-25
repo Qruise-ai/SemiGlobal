@@ -385,7 +385,8 @@ following keys:
     T = tf - tinit
     # If Nts is a float, it has to be converted to an integer such that it can be
     # used for indexing:
-    Nts = int(np.round(Nts))
+    if not isinstance(Nts, int):
+        Nts = int(np.round(Nts))
     # The length of the time step interval:
     Tts = T/Nts
     # The index of the middle term in the time step:
