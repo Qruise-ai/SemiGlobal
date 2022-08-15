@@ -1,0 +1,10 @@
+black
+flake8
+matplotlib
+numpy
+pytest
+pytest-cov
+scipy
+setuptools
+setuptools_scm
+tox
