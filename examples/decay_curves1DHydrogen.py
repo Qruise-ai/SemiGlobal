@@ -5,12 +5,12 @@ Created on Mon Mar 28 15:05:03 2022
 @author: Ido Schaefer
 
 This script reproduces the results of the paper:
-"Semi-global approach for propagation of the time-dependent Schr\"odinger 
+"Semi-global approach for propagation of the time-dependent Schrödinger
 equation for time-dependent and nonlinear problems", 2017, Sec. 4.3, Fig. 8.
 The results were originally obtained by a MATLAB implementation of the algorithm.
 Minor differences from the original results (the relative deviation from the
 exact solution) have been observed in the large time-step regime and the small
-time-step regime. These regimes are more sensitive to roundoff errors: The large
+time-step regime. These regimes are more sensitive to round-off errors: The large
 time-step regime is characterized by a slight instability in the propagation
 process, and the error in the small time-step regime is close to the machine
 precision regime.

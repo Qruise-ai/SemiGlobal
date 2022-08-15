@@ -3,7 +3,7 @@
 Semi-global propagator functions
 
 see: Ido Schaefer, Hillel Tal-Ezer and Ronnie Kosloff,
-"Semi-global approach for propagation of the time-dependent Schr\"odinger 
+"Semi-global approach for propagation of the time-dependent Schrödinger
 equation for time-dependent and nonlinear problems", JCP 2017
 
 
@@ -13,10 +13,12 @@ ido.schaefer@gmail.com
 """
 
 from typing import NamedTuple, Protocol, TypedDict
+
 import numpy as np
-from scipy.linalg import norm, eig
-from .Chebyshev import chebcM, chebc2result, vchebMop
+from scipy.linalg import eig, norm
+
 from .Arnoldi import createKrop, getRvKr
+from .Chebyshev import chebc2result, chebcM, vchebMop
 from .NewtonIpln import divdif, dvd2fun, get_capacity
 
 
@@ -287,7 +289,7 @@ def Ufrom_vCheb(
 
     fGv = Vcheb @ Ccheb_f
     U = v_tpols @ timeM + fGv
-    if not f_error is None:
+    if f_error is not None:
         fUerror = (
             f_error
             * norm(fGv[:, -2], check_finite=False)
@@ -445,28 +447,6 @@ class GdiffFunction(Protocol):
             :math:`(G(u1[:, j], t1[j]) - G(u2, t2))u1[:, j]`,
             where t1[j] is the j'th time point and u1[:, j] is the j'th column of u1.
         """
-        pass
-
-    """
-    `mniter`: The mean number of iteration for a time step, excluding the first step,
-        which typically requires more iterations. Usually, mniter should be 1 for ideal
-        efficiency of the algorithm.
-        `matvecs`: The number of G(u, t) operations on a vector
-        `t`: 1D ndarray; the time grid of propagation
-        `U`: 2D ndarray; the solution at t, where different time-points are represented
-        by separate columns
-        `Utestp`: 2D ndarray; the solution at all test-points in all time-steps,
-        where different time steps are represented by separate columns
-        `texp_error`: 1D ndarray; the estimations for the error of U resulting from the
-        time-expansion, for all time-steps
-        f_error: 1D ndarray; the estimations for the error of the computation of the
-        function of matrix for all time-steps (for the Arnoldi approximation only)
-        fUerror: 1D ndarray; the estimations for the error of U, resulting from the
-        computation of the function of matrix, for all time-steps
-        conv_error: 1D ndarray; the estimations for the convergence errors for all time-steps
-        niter: 1D ndarray; the number of iterations for each time-steps
-        max_errors: A nested dictionary which contains the maximal estimated errors   
-    """
 
 
 class SemiGloabalMaxError(TypedDict):
@@ -608,16 +588,16 @@ def SemiGlobal(
     (s(t) in the paper) in the time points specified by t. Different time-points
     are represented by separate columns. The number of rows of the output of ihfun
     is identical to the dimension of the state vector.
-    The default None value means that there is no inhomogeneous term (s(t) \equiv 0).
+    The default None value means that there is no inhomogeneous term (:math:`s(t) \\equiv 0`).
     ev_domain: ndarray/list/tuple of 2 terms; the (estimated) boundaries of the eigenvalue
-    domain of G(u, t); required when a Chebyshev algorithm is used for the computation of
+    domain of :math:`G(u, t)`; required when a Chebyshev algorithm is used for the computation of
     the function of matrix.
     The default None value means that the Arnoldi algorithm is employed instead.
-    The general form for an ndarray is np.r_[lambda_min, lambda_max], where
-    lambda_min is the (estimated) lowest eigenvalue of G(u, t), and lambda_max is
+    The general form for an ndarray is :math:`np.r_[lambda_min, lambda_max]`, where
+    lambda_min is the (estimated) lowest eigenvalue of :math:`G(u, t)`, and lambda_max is
     the (estimated) highest eigenvalue.
-    Since G(u, t) is time-dependent, its eigenvalue domain is also time-dependent.
-    Hence, ev_domain has to cover all the eigenvalue domains of G(u, t) throughout
+    Since :math:`G(u, t)` is time-dependent, its eigenvalue domain is also time-dependent.
+    Hence, ev_domain has to cover all the eigenvalue domains of :math:`G(u, t)` throughout
     the propagation process.
     Niter: The maximal allowed number of iterations for all time-steps
     excluding the first
@@ -755,7 +735,7 @@ def SemiGlobal(
     v_vecs = np.empty((Nu, Nt_ts + 1), dtype=data_type, order="F")
     # If there is no inhomogeneous term in the equation, ihfun == None, and there_is_ih == False.
     # If there is, there_is_ih == true.
-    there_is_ih = ihfun != None
+    there_is_ih = ihfun is not None
     if there_is_ih:
         s = np.empty((Nu, Nt_ts + 1), dtype=data_type, order="F")
         s[:, 0] = ihfun(tinit, *args).squeeze()

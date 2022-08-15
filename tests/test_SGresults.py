@@ -56,6 +56,8 @@ K = p**2 / 2
 # The potential energy matrix diagonal in the x domain:
 V = x**2 / 2
 fi0_harmonic = np.pi ** (-1 / 4) * np.exp(-(x**2) / 2) * np.sqrt(dx)
+
+
 # The output time grid:
 def Gop(u, t, v):
     return -1j * Hpsi(K, V + x * np.cos(t), v)

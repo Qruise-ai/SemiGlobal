@@ -34,7 +34,7 @@ except ImportError:
     from sphinx import apidoc
 
 output_dir = os.path.join(__location__, "api")
-module_dir = os.path.join(__location__, "../src/semiglobal")
+module_dir = os.path.join(__location__, "../src/SemiGlobal")
 try:
     shutil.rmtree(output_dir)
 except FileNotFoundError:
@@ -267,17 +267,25 @@ latex_documents = [
 # latex_domain_indices = True
 
 # -- External mapping --------------------------------------------------------
+# -- External mapping --------------------------------------------------------
 python_version = ".".join(map(str, sys.version_info[0:2]))
 intersphinx_mapping = {
     "sphinx": ("https://www.sphinx-doc.org/en/master", None),
     "python": ("https://docs.python.org/" + python_version, None),
-    "matplotlib": ("https://matplotlib.org", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
     "numpy": ("https://numpy.org/doc/stable", None),
     "sklearn": ("https://scikit-learn.org/stable", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "setuptools": ("https://setuptools.pypa.io/en/stable/", None),
     "pyscaffold": ("https://pyscaffold.org/en/stable", None),
+    "tensorflow": (
+        "https://www.tensorflow.org/api_docs/python",
+        "https://raw.githubusercontent.com/GPflow/tensorflow-intersphinx/master/tf2_py_objects.inv",
+    ),
+    "IPython": ("https://ipython.readthedocs.io/en/stable/", None),
 }
+
+intersphinx_timeout = 10.0
 
 print(f"loading configurations for {project} {version} ...", file=sys.stderr)

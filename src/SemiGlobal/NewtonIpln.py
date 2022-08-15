@@ -5,33 +5,46 @@ Functions for a Newton interpolation
 Author: Ido Schaefer
 """
 
+from typing import Tuple
+
 import numpy as np
 
 
-def divdif(z, fz):  # Divided difference computation
+def divdif(
+    z: np.ndarray, fz: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray]:  # Divided difference computation
     """
     The function computes the divided difference coefficients for a Newton interpolation.
     The routine is based on a divided difference table, where each
     coefficient is given by the last term of a new diagonal in the table.
     The program applies also for an interpolated function with multiple output values.
-    Input:
-    z: A 1D ndarray; contains the sampling points
-    fz: The function values at z.
+
+    Parameters
+    ----------
+    z: np.ndarray
+        A 1D ndarray; contains the sampling points
+    fz: np.ndarray
+        The function values at z.
         For a function which returns a single value: fz can be either a 1D ndarray or a
         2D ndarray with dimensions (1,N), where N is the number of interpolation points.
         For a function which returns multiple values: fz is a 2D ndarray, where
         function values of different sampling points are represented by different columns.
-    Output: A tuple which contains two ndarrays. For example, for:
-    polcoef, diagonal = divdif(z, fz)
-    the output contains the following data:
-    polcoef: The coefficients of the Newton basis polynomials for the Newton
-    interpolation.
-    diagonal: The last diagonal, for continuing the process to higher orders,
-    if necessary.
-    For a 1D fz, polcoef and diagonal are 1D ndarrays.
-    For a 2D fz, polcoef and diagonal are 2D ndarrays. The different columns of
-    polcoef represent the coefficients of different Newton basis polynomials.
-    The different columns of diagonal represent different divided differences."""
+
+    Returns
+    -------
+    np.ndarray
+        A tuple which contains two ndarrays. For example, for:
+        polcoef, diagonal = divdif(z, fz)
+        the output contains the following data:
+        polcoef: The coefficients of the Newton basis polynomials for the Newton
+        interpolation.
+        diagonal: The last diagonal, for continuing the process to higher orders,
+        if necessary.
+        For a 1D fz, polcoef and diagonal are 1D ndarrays.
+        For a 2D fz, polcoef and diagonal are 2D ndarrays. The different columns of
+        polcoef represent the coefficients of different Newton basis polynomials.
+        The different columns of diagonal represent different divided differences.
+    """
 
     fz_is_1D = fz.ndim == 1
     if fz_is_1D:
@@ -64,23 +77,37 @@ def divdif(z, fz):  # Divided difference computation
     return polcoef, diagonal
 
 
-def dvd2fun(sp, polcoef, resultp):
+def dvd2fun(
+    sp: np.ndarray,
+    polcoef: np.ndarray,
+    resultp: np.ndarray,
+) -> np.ndarray:
     """
     The program computes the Newton interpolation polynomial of a function from its divided
-    differences and sampling points, evaluated at a set of points specified by resultp.
+    differences and sampling points, evaluated at a set of points specified by `resultp`.
     It applies also for functions which return a vector.
-    sp: 1D ndarray; the set of sampling points; the last sampling point is
-    unrequired, but can be nevertheless included in sp.
-    polcoef: The divided differences;
+
+    Parameters
+    ----------
+    sp: np.ndarray
+        1D ndarray; the set of sampling points; the last sampling point is
+        unrequired, but can be nevertheless included in sp.
+    polcoef: np.ndarray
+        The divided differences;
         For a function which returns a single value: polcoef can be either a 1D ndarray or a
         2D ndarray with dimensions (1,N), where N is the number of sampling points.
         For a function which returns multiple values: polcoef is a 2D ndarray, where
         the different vector divided differences are represented by different columns.
-    resultp: 1D ndarray; the points at which the desired function is to be evaluated.
-    Output: 2D ndarray for functions which return a vector with resultp.size>1;
-    1D ndarray for functions which return a vector with resultp.size==1 or
-    functions which return a scalar with resultp.size>1;
-    0D ndarray for functions which return a scalar with resultp.size==1"""
+    resultp: np.ndarray
+        1D ndarray; the points at which the desired function is to be evaluated.
+
+    Returns
+    -------
+        2D ndarray for functions which return a vector with resultp.size>1;
+        1D ndarray for functions which return a vector with resultp.size==1 or
+        functions which return a scalar with resultp.size>1;
+        0D ndarray for functions which return a scalar with resultp.size==1
+    """
 
     polcoef_is_1D = polcoef.ndim == 1
     if polcoef_is_1D:
@@ -98,11 +125,22 @@ def dvd2fun(sp, polcoef, resultp):
     # input polcoef is 1D, or Nrp == 1
 
 
-def get_capacity(sp, testp):
+def get_capacity(sp, testp) -> float:
     """
     Computation of the capacity of the interpolation domain.
-    sp: 1D ndarray which contains the sampling points
-    testp: The test point"""
+
+    Parameters
+    ----------
+    sp: np.ndarray
+        1D ndarray which contains the sampling points
+    testp: np.ndarray
+        The test point
+
+    Returns
+    -------
+    float
+        The capacity of the interpolation domain.
+    """
 
     capacity = 1
     sp_comp = sp[sp != testp]
