@@ -18,7 +18,7 @@ def createKrop(
     data_type=np.complex128,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    The function creates an orthonormal Krylov basis of dimension `Nv`+1,
+    The function creates an orthonormal Krylov basis of dimension `Nv+1`,
 
     Parameters
     ----------
@@ -28,7 +28,7 @@ def createKrop(
     v0: np.ndarray
         vector v0
     Nv: int
-        Krylov basis of dimension `Nv`+1
+        Krylov basis of dimension `Nv+1`
     data_type: Type, default np.complex128
 
     Returns

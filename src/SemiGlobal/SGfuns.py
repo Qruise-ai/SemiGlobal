@@ -519,7 +519,7 @@ class SemiGloabalHistory(TypedDict):
 
 
 class SemiGloabalResult(NamedTuple):
-    """Result of `SemiGlobal`function
+    """Result of `SemiGlobal` function
 
     Parameters
     ----------
@@ -572,50 +572,64 @@ def SemiGlobal(
         scale operations with the highest scaling with the dimension of the problem.)
     ui: np.ndarray
         1D ndarray; represents the initial state vector.
-    tgrid: The time grid of the desired output solution (see U in the output).
-    Should be ordered in an increasing order for a forward propagation, and a
-    decreasing order for a backward propagation.
-    Nts: The number of time steps of the propagation.
-    Nt_ts: The number of interior Chebyshev time points in each time-step, used during
-    the computational process (M in the paper).
-    Nfm: The number of expansion terms for the computation of the function of
-    matrix (K in the paper).
-    tol: The desired tolerance of the convergence (epsilon in the paper)
-    ihfun: A function object of the form: ihfun(t, *args), where:
+    tgrid: np.ndarray
+        The time grid of the desired output solution (see U in the output).
+        Should be ordered in an increasing order for a forward propagation, and a
+        decreasing order for a backward propagation.
+    Nts: int
+        The number of time steps of the propagation.
+    Nt_ts: int
+        The number of interior Chebyshev time points in each time-step, used during
+        the computational process (M in the paper).
+    Nfm: int
+        The number of expansion terms for the computation of the function of
+        matrix (K in the paper).
+    tol: float
+        The desired tolerance of the convergence (epsilon in the paper)
+    ihfun: Callable default None
+        A function object of the form: `ihfun(t, *args)`, where:
         t: 1D ndarray; represents several time-points.
         args: As above; the optional arguments must be the same as for Gop.
-    ihfun returns a 2D ndarray which represents the inhomogeneous source term
-    (s(t) in the paper) in the time points specified by t. Different time-points
-    are represented by separate columns. The number of rows of the output of ihfun
-    is identical to the dimension of the state vector.
-    The default None value means that there is no inhomogeneous term (:math:`s(t) \\equiv 0`).
-    ev_domain: ndarray/list/tuple of 2 terms; the (estimated) boundaries of the eigenvalue
-    domain of :math:`G(u, t)`; required when a Chebyshev algorithm is used for the computation of
-    the function of matrix.
-    The default None value means that the Arnoldi algorithm is employed instead.
-    The general form for an ndarray is :math:`np.r_[lambda_min, lambda_max]`, where
-    lambda_min is the (estimated) lowest eigenvalue of :math:`G(u, t)`, and lambda_max is
-    the (estimated) highest eigenvalue.
-    Since :math:`G(u, t)` is time-dependent, its eigenvalue domain is also time-dependent.
-    Hence, ev_domain has to cover all the eigenvalue domains of :math:`G(u, t)` throughout
-    the propagation process.
-    Niter: The maximal allowed number of iterations for all time-steps
-    excluding the first
-    Niter1st: The maximal allowed number of iterations for the first time-step
-    test_tpoint: Represents the test point for the time-expansion error computation;
-    defined as the difference between the test point and the beginning of the time
-    step. It is the same for all time steps. The default None value means that the
-    default test point is computed by the program.
-    data_type: The data-type object of the output solution
-    display_mode: A boolean variable; True (default) means that warnings are displayed
-    during the propagation. False means that warnings are displayed only
-    before and after the propagation.
-    save_memoty: A boolean variable; False (default) means that the solution in all propagation
-    grid (history['U'] in the output) and test points (history['Utestp']) is stored
-    in the memory and is contained in the output dictionary of the propagation
-    details, history. True means the opposite.
-    args: Optional additional arguments for the input functions: Gop, Gdiff_op,
-    and ihfun; they should be written in the place of *args separated by commas.
+        ihfun returns a 2D ndarray which represents the inhomogeneous source term
+        (s(t) in the paper) in the time points specified by t. Different time-points
+        are represented by separate columns. The number of rows of the output of ihfun
+        is identical to the dimension of the state vector.
+        The default None value means that there is no inhomogeneous term (:math:`s(t) \\equiv 0`).
+    ev_domain: Union[ndarray,list,tuple] default None
+        ndarray/list/tuple of 2 terms; the (estimated) boundaries of the eigenvalue
+        domain of :math:`G(u, t)`; required when a Chebyshev algorithm is used for the computation of
+        the function of matrix.
+        The default None value means that the Arnoldi algorithm is employed instead.
+        The general form for an ndarray is :math:`np.r_[lambda_min, lambda_max]`, where
+        lambda_min is the (estimated) lowest eigenvalue of :math:`G(u, t)`, and lambda_max is
+        the (estimated) highest eigenvalue.
+        Since :math:`G(u, t)` is time-dependent, its eigenvalue domain is also time-dependent.
+        Hence, ev_domain has to cover all the eigenvalue domains of :math:`G(u, t)` throughout
+        the propagation process.
+    Niter: int
+        The maximal allowed number of iterations for all time-steps
+        excluding the first
+    Niter1st: int
+        The maximal allowed number of iterations for the first time-step
+    test_tpoint: np.ndarray
+        Represents the test point for the time-expansion error computation;
+        defined as the difference between the test point and the beginning of the time
+        step. It is the same for all time steps. The default None value means that the
+        default test point is computed by the program.
+    data_type: Type, default np.complex128
+        The data-type object of the output solution
+    display_mode: bool
+        A boolean variable; True (default) means that warnings are displayed
+        during the propagation. False means that warnings are displayed only
+        before and after the propagation.
+    save_memoty: bool
+        A boolean variable; False (default) means that the solution in all propagation
+        grid (`history['U']` in the output) and test points (`history['Utestp']`) is stored
+        in the memory and is contained in the output dictionary of the propagation
+        details, history. True means the opposite.
+    args: list
+        Optional additional arguments for the input functions: Gop, Gdiff_op,
+        and ihfun; they should be written in the place of `*args` separated by commas.
 
     Returns
     -------
