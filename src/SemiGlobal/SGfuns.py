@@ -429,7 +429,7 @@ class GdiffFunction(Protocol):
         ----------
         u1 : np.ndarray
             2D ndarray; represents the state vector in several time points, where
-            different time-points are resresented by separate columns.
+            different time-points are represented by separate columns.
         t1 : np.ndarray
             1D ndarray; represents the time points in which the corresponding
             columns of u1 are evaluated.
@@ -628,12 +628,13 @@ def SemiGlobal(
         in the memory and is contained in the output dictionary of the propagation
         details, history. True means the opposite.
     args: list
-        Optional additional arguments for the input functions: Gop, Gdiff_op,
+        Optional additional arguments for the input functions: `Gop`, `Gdiff_op`,
         and ihfun; they should be written in the place of `*args` separated by commas.
 
     Returns
     -------
     SemiGloabalResult
+        A tuple of 
         `U`: 2D ndarray; contains the solution at the time points specified in tgrid;
         the different time-points are respresented by separate columns and
         `history`: A dictionary with the details of the propagation process
@@ -647,9 +648,9 @@ def SemiGlobal(
     direction = np.sign(tgrid[1] - tgrid[0])
     Nt = tgrid.size
     tinit = tgrid[0]
-    tf = tgrid[Nt - 1]
+    tfinal = tgrid[Nt - 1]
     # The length of the time interval of the whole propagation (can be negative):
-    T = tf - tinit
+    T = tfinal - tinit
     # If Nts is a float, it has to be converted to an integer such that it can be
     # used for indexing:
     if not isinstance(Nts, int):
@@ -680,9 +681,9 @@ def SemiGlobal(
     t_2ts = np.r_[t_ts, test_tpoint, Tts + t_ts[1:Nt_ts], Tts + test_tpoint]
     # The full propagation grid:
     propagation_grid = np.r_[
-        np.kron(np.r_[tinit : (tf - 2 * np.spacing(tf)) : Tts], np.ones(Nt_ts))
+        np.kron(np.r_[tinit : (tfinal - 2 * np.spacing(tfinal)) : Tts], np.ones(Nt_ts))
         + np.tile(np.r_[t_ts[0 : (Nt_ts - 1)], test_tpoint], Nts),
-        tf,
+        tfinal,
     ]
     # The -2*np.spacing(tf) is in order to avoid undesirable outcomes of roundoff errors.
     # Necessary for error estimation of \tilde{f}_{Nt_ts}(z, t):

@@ -45,7 +45,7 @@ def gsNLHdiag(H0, Vnl, x, tol):
     return gs, niter
 
 
-# Creating problem details for the hatmonic oscillator tests:
+# Creating problem details for the harmonic oscillator tests:
 L = 16 * np.sqrt(np.pi)
 Nx = 128
 dx = L / Nx
@@ -64,7 +64,8 @@ def Gop(u, t, v):
 
 
 def Gdiff_op(u1, t1, u2, t2):
-    return -1j * (xcolumn * (np.cos(t1) - np.cos(t2))) * u1
+    m = (xcolumn * (np.cos(t1) - np.cos(t2))) * u1
+    return -1j * m
 
 
 # For the BEC tests:
@@ -172,16 +173,16 @@ def test_result_ih_cheb():
 
 def test_result_ih_arnoldi():
     U, _ = SemiGlobal(
-        Gop,
-        Gdiff_op,
-        0,
-        fi0_harmonic,
-        np.r_[0, 10],
-        200,
-        9,
-        9,
-        1e-5,
-        ihfun,
+        Gop=Gop,
+        Gdiff_op=Gdiff_op,
+        Gdiff_matvecs=0,
+        ui=fi0_harmonic,
+        tgrid=np.r_[0, 10],
+        Nts=200,
+        Nt_ts=9,
+        Nfm=9,
+        tol=1e-5,
+        ihfun=ihfun,
         save_memory=True,
     )
     mx = np.sum(np.conj(U[:, 1]) * U[:, 1] * x)
