@@ -811,7 +811,7 @@ def SemiGlobal(
                 # It means that the algorithm diverges.
                 # In such a case, change Nts, Nt_ts and/or Nfm.
                 print(f"Error: The algorithm diverges (in time step No. {tsi + 1}).")
-                history["mniter"] = allniter / tsi
+                history["mniter"] = allniter / tsi if tsi else 0
                 return U, history
             if Arnoldi:
                 # Creating the Krylov space by the Arnodi iteration procedure,
