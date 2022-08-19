@@ -38,7 +38,7 @@ def test_SemiGlobal_SC():
     def signal(t):
         return (
             amp
-            * np.exp(-(((t - t_mid) / t_sigma) ** 2))
+            * np.exp(-0.5*(((t - t_mid) / t_sigma) ** 2))
             * np.cos(t * 2 * np.pi * lo_freq)
         )
 
