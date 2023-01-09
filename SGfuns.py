@@ -496,7 +496,7 @@ following keys:
         # Starting an iterative process, until convergence:
         niter = 0
         reldif = tol + 1
-        while (reldif>tol and ((tsi>0 and niter<Niter) or (tsi == 0 and niter<Niter1st))):
+        while ((tsi>0 and niter<Niter) or (tsi == 0 and niter<Niter1st)):
             # Calculation of the inhomogeneous s_ext vectors. Note that
             # s_ext[:, tmidi] is equivalent to s[:, tmidi], and therefore not
             # calculated.
